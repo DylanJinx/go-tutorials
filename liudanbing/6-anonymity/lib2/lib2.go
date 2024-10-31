@@ -8,4 +8,4 @@ func Test() {
 
 func init() {
 	fmt.Println("lib2. init() ...")
-}
+} 
