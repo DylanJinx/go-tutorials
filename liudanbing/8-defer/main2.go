@@ -2,7 +2,6 @@
 	知识点二：defer和return谁先谁后
 	- returnFunc()函数先执行，returnFunc()函数执行完毕后，deferFunc()函数才会执行
 */
-
 package main
 
 import "fmt"
@@ -22,6 +21,6 @@ func returnAndDefer() int {
 	return returnFunc()
 }
 
-func main() {
+func main2() {
 	returnAndDefer()
 }

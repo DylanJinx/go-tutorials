@@ -25,7 +25,7 @@ func main() {
 	slice4 := make([]int, 3)
 	fmt.Printf("len = %d, slice4 = %v\n", len(slice4), slice4)
 
-	var slice []int
+	var slice []int 
 	if slice == nil {
 		fmt.Println("slice is nil")
 	} else {

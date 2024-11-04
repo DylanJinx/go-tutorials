@@ -11,12 +11,12 @@ func main() {
 
 	if myMap1 == nil {
 		fmt.Println("myMap1 is nil")
-	}
+	} 
 
-	myMap1 = make(map[string]string, 10)
+	myMap1 = make(map[string]string, 2)
 	myMap1["one"] = "java"
 	myMap1["two"] = "c++"
-	myMap1["three"] = "python"
+	myMap1["three"] = "python" // 超过容量，会重新分配内存
 
 	fmt.Println(myMap1) //map[one:java three:python two:c++] 无序的，使用的是hashmap
 

@@ -24,7 +24,7 @@ func defer_call() {
 }
 
 // defer表示一个函数在执行最后、在结束之前的一种机制，它会在它所在的函数体在结束之前执行，类似于C++中的析构函数
-func main1() {
+func main() {
 	startTime := time.Now()
 
 	// 写入defer关键字
