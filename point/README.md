@@ -94,6 +94,114 @@ func main() {
 ![10](./imgs/10.png)  
 左边和右边几乎等价，但是左边的modify是普通函数，右边是从属于结构体的成员方法。
 
+坑：
+- `func modify(b Book){}` 和 `func (b Book) modify(){}`:值实现了这个接口，则指针默认也实现了接口。
+- `func modify(b *Book){}` 和 `func (b *Book) modify(){}`: 反之不成立。
+
+#### 接口——值实现了接口，指针也默认实现接口
+
+- **值接收者** (`func modify(b Book) {}`):
+  - 当一个类型 `Book` 实现了某个接口的所有方法时，`Book` 类型的值被认为实现了这个接口。
+  - 由于指针 `*Book` 是 `Book` 类型的一个引用，因此如果 `Book` 类型实现了接口，则 `*Book` 也会默认实现该接口。
+  
+例如：
+
+```go
+type Book struct {
+    Title string
+}
+
+type Modifier interface {
+    modify()
+}
+
+// Book 类型实现了 modify 方法
+func (b Book) modify() {
+    // 实现逻辑
+}
+
+// 因为 Book 实现了 Modifier 接口，所以 *Book 也默认实现了 Modifier 接口
+var b Book
+var pb *Book = &b
+var mod Modifier = pb // 这是合法的
+```
+
+#### 接口——指针接收者和方法接收者的反向情况
+
+- **指针接收者** (`func modify(b *Book) {}`):
+  - 如果方法接收者是指针类型 `*Book`，那么只有 `*Book` 的实例才能调用这个方法。
+  - 这意味着 `Book` 类型的值并不能直接调用这个方法，也就是说，`Book` 不会被视为实现了该接口。
+
+例如：
+
+```go
+// Book 类型实现了指针接收者的 modify 方法
+func (b *Book) modify() {
+    // 实现逻辑
+}
+
+var b Book
+var pb *Book = &b
+
+// 不能将 Book 直接作为 Modifier 接口，因为方法接收者是 *Book
+// var mod Modifier = b // 这是不合法的
+```
+
+#### 方法——值接收者与指针接收者的调用
+
+1. **值接收者的情况** (`func (b Book) modify() {}`):
+   - 当方法的接收者是值类型（如 `Book`），无论是 `Book` 的值还是 `*Book` 的指针都可以调用这个方法。
+   - 当你用 `pb *Book` 调用 `modify` 方法时，Go 会自动解引用这个指针，调用的是 `b Book` 的值接收者方法。
+
+   示例代码：
+
+   ```go
+   type Book struct {
+       Title string
+   }
+
+   // 值接收者方法
+   func (b Book) modify() {
+       // 实现逻辑
+   }
+
+   func main() {
+       b := Book{Title: "Go Programming"}
+       b.modify() // 直接调用
+
+       pb := &b
+       pb.modify() // 通过指针调用，自动解引用
+   }
+   ```
+
+   在这种情况下，`b` 和 `pb` 都可以调用 `modify` 方法。
+
+2. **指针接收者的情况** (`func (b *Book) modify() {}`):
+   - 当方法的接收者是指针类型（如 `*Book`），只有 `*Book` 的指针可以调用这个方法。
+   - 此时，`Book` 的值无法调用这个方法，因为它不包含指向原始值的指针。
+
+   示例代码：
+
+   ```go
+   // 指针接收者方法
+   func (b *Book) modify() {
+       // 实现逻辑
+   }
+
+   func main() {
+       b := Book{Title: "Go Programming"}
+       // b.modify() // 这将导致编译错误，因为方法接收者是 *Book
+
+       pb := &b
+       pb.modify() // 通过指针调用，这是合法的
+   }
+   ```
+
+- **值接收者**：`b Book` 和 `pb *Book` 都可以调用。
+- **指针接收者**：只有 `pb *Book` 可以调用，`b Book` 不能直接调用。
+
+
+
 ## 5. 何时需要给函数传切片的指针
 
 
