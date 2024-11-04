@@ -67,3 +67,5 @@
 这个小项目就是只学完1到6的知识点后，就可以完成这个小项目。
     - 代码： <a href = "./1-6">command line calculator</a>
 
+- 1～11: <a href = "./1-11/命令行图书管理系统.md">命令行图书管理系统</a>
+    - - 代码： <a href = "./1-11">Command line library management system</a>
