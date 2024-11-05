@@ -40,6 +40,10 @@ func main() {
 	hero.SetName("liu4")
 	hero.Show() // hero =  {zhang3 100 1}
 
-	hero.SetName2("liu4")
+	point_hero := &hero
+	point_hero.SetName("liu4") // 自动转换为(*point_hero).SetName("liu4")
+	hero.Show() // hero =  {zhang3 100 1}
+
+	hero.SetName2("liu4") // 自动转换为(&hero).SetName2("liu4")
 	hero.Show() // hero =  {liu4 100 1}
 }
