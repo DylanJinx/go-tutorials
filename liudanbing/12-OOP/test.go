@@ -1,25 +1,20 @@
 package main
 
-import "fmt"
+// import "fmt"
 
-type Person struct {
-    Name string
+type Book struct {
+    Title string
 }
 
 // 指针接收者方法
-func (p *Person) ChangeName(newName string) {
-    (*p).Name = newName  // 直接修改 p 所指向对象的 Name 字段
+func (b *Book) ModifyTitle(newTitle string) {
+    b.Title = newTitle
 }
 
 func main() {
-    p := Person{Name: "Alice"}
+    var b Book = Book{"Go Programming"}  // 值类型的 Book
+    var p *Book = &b                    // 指针类型的 Book
 
-    // // 传递指针 &p 给 ChangeName 方法
-    // p.ChangeName("Bob")
-    // fmt.Println(p.Name)  // Bob，因为 ChangeName 修改了原始对象
-	fmt.Println(p)
-	//fmt.Printf("%p", &p)
-	fmt.Printf("%T",p)
-	p.ChangeName("bob")
-	fmt.Println(p)
+    b.ModifyTitle("Updated Go")  // 编译错误：值类型不能调用指针接收者方法
+    p.ModifyTitle("Updated Go")  // 正常：指针类型调用指针接收者方法
 }
