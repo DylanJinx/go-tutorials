@@ -1,0 +1,12 @@
+{
+    "books": {
+        "2": {
+            "ID": 2,
+            "Title": "blockchain",
+            "Author": "dylan",
+            "Category": 4,
+            "Price": 9999
+        }
+    },
+    "next_id": 3
+}

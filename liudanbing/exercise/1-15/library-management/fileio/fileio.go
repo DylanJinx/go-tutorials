@@ -43,7 +43,7 @@ func LoadFromFile(lib *library.Library, filename string) error {
 	}
 
 	decoder := json.NewDecoder(file) // 创建JSON解码器
-	err = decoder.Decode(&data) // 解码文件内容
+	err = decoder.Decode(&data) // 解码文件内容, 并存入data
 	if err != nil {
 		return err
 	}

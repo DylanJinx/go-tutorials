@@ -214,20 +214,3 @@ func LoadFromFile(lib *library.Library, filename string) error {
 **缺点**：
 
 - **冗余**：如果结构体只在一个地方使用，定义具名结构体可能显得冗余。
-
-### 5. 结论
-
-- **匿名结构体**：适用于临时、单次使用的场景，代码更加简洁。
-- **具名结构体**：适用于需要多次使用或在多个地方共享的场景，代码更加清晰和可维护。
-
-在你的项目中，使用匿名结构体来封装保存和加载数据是非常合适的，因为这种结构体通常只在这两个函数中使用一次，不需要在其他地方复用。
-
-### 6. 进一步学习
-
-为了更好地理解结构体、匿名结构体和结构体标签，建议你参考以下资源：
-
-- **Go 官方文档 - Structs**：[https://golang.org/doc/effective_go.html#structs](https://golang.org/doc/effective_go.html#structs)
-- **Go 官方文档 - Struct Tags**：[https://golang.org/pkg/reflect/#StructTag](https://golang.org/pkg/reflect/#StructTag)
-- **Go by Example - Structs**：[https://gobyexample.com/structs](https://gobyexample.com/structs)
-
-如果你还有其他问题，欢迎继续提问！
