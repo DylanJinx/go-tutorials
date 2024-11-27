@@ -253,6 +253,117 @@ func deleteAnimal(z *zoo.Zoo, scanner *bufio.Scanner) {
 }
 
 func updateAnimal(z *zoo.Zoo, scanner *bufio.Scanner) {
+	fmt.Println("输入要修改的动物ID：")
+	if !scanner.Scan() {
+		fmt.Println("读取输入时发生错误。")
+		return
+	}
+	idStr := scanner.Text()
+	id, err := strconv.Atoi(idStr) // convert string to int
+	if err != nil {
+		fmt.Println("无效的ID。")
+		return
+	}
+
+	animal, exists := z.GetAnimal(id)
+	if !exists {
+		fmt.Println("未找到指定ID的动物。")
+		return
+	}
+
+	fmt.Printf("当前动物详情：%s\n", animal.GetDetails())
+
+	fmt.Print("输入新的名字（留空表示不修改）：")
+	if !scanner.Scan() {
+		fmt.Println("读取输入时发生错误。")
+		return
+	}
+	name := scanner.Text()
+	if name == "" {
+		name = animal.GetName()
+	}
+
+	fmt.Print("输入新的年龄（留空表示不修改）：")
+	if !scanner.Scan() {
+		fmt.Println("读取输入时发生错误。")
+		return
+	}
+	ageStr := scanner.Text()
+	var age int
+	if ageStr == "" {
+		// 保持原有年龄
+		switch a := animal.(type) {
+		case *models.Lion:
+			age = a.Age
+		case *models.Eagle:
+			age = a.Age
+		case *models.Snake:
+			age = a.Age
+		case *models.Shark:
+			age = a.Age
+		case *models.Frog:
+			age = a.Age
+		default:
+			fmt.Println("不支持的动物类型。")
+			return
+		}
+	} else {
+		age, err = strconv.Atoi(ageStr)
+		if err != nil {
+			fmt.Println("无效的年龄。")
+			return
+		}
+	}
+
+	var updatedAnimal models.Animal
+	switch a := animal.(type) {
+	case *models.Lion:
+		updatedLion := &models.Lion{
+			Name: name,
+			Age:  age,
+			Category: a.Category,
+		}
+		updatedAnimal = updatedLion
+	case *models.Eagle:
+		updatedEagle := &models.Eagle{
+			Name: name,
+			Age:  age,
+			Category: a.Category,
+		}
+		updatedAnimal = updatedEagle
+	case *models.Snake:
+		updatedSnake := &models.Snake{
+			Name: name,
+			Age:  age,
+			Category: a.Category,
+		}
+		updatedAnimal = updatedSnake
+	case *models.Shark:
+		updatedShark := &models.Shark{
+			Name: name,
+			Age:  age,
+			Category: a.Category,
+		}
+		updatedAnimal = updatedShark
+	case *models.Frog:
+		updatedFrog := &models.Frog{
+			Name: name,
+			Age:  age,
+			Category: a.Category,
+		}
+		updatedAnimal = updatedFrog
+	default:
+		fmt.Println("不支持的动物类型。")
+		return
+	}
+
+	success := z.UpdateAnimal(id, updatedAnimal)
+	if success {
+		fmt.Println("动物更新成功。")
+	} else {
+		fmt.Println("更新失败。")
+	}
+
 }
 
 func queryAnimal(z *zoo.Zoo, scanner *bufio.Scanner) {

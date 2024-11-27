@@ -1,0 +1,50 @@
+{
+  "animals": [
+    {
+      "type": "Lion",
+      "data": {
+        "id": 1,
+        "name": "lion_1",
+        "age": 10,
+        "category": 0
+      }
+    },
+    {
+      "type": "Eagle",
+      "data": {
+        "id": 2,
+        "name": "eagle_1",
+        "age": 20,
+        "category": 1
+      }
+    },
+    {
+      "type": "Snake",
+      "data": {
+        "id": 3,
+        "name": "snake_1",
+        "age": 30,
+        "category": 2
+      }
+    },
+    {
+      "type": "Shark",
+      "data": {
+        "id": 6,
+        "name": "shark_6",
+        "age": 60,
+        "category": 3
+      }
+    },
+    {
+      "type": "Frog",
+      "data": {
+        "id": 5,
+        "name": "frog_5",
+        "age": 50,
+        "category": 4
+      }
+    }
+  ],
+  "next_id": 7
+}
