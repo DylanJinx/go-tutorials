@@ -88,4 +88,4 @@
 15. interface 通⽤万能类型
 - interface{}空接⼝
     - int 、string、float32、float64、struct .... 都实现了interface{}，就可以⽤interface{}类型引⽤任意的数据类型
-- 类型断⾔
+- 类型断⾔(`arg`为`interface{}`类型，通过`arg.(string)`, `arg.(int)`等来判断`arg`底层数据类型，会返回`value`和`ok`)
