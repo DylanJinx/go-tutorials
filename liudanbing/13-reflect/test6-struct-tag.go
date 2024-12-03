@@ -11,7 +11,7 @@ type resume struct {
 }
 
 func findTag(str interface{}) {
-	t := reflect.TypeOf(str).Elem() // 注：t := reflect.TypeOf(str)
+	t := reflect.TypeOf(str).Elem() // 注：t := reflect.TypeOf(str), Elem()方法是获取指针指向的元素类型
 	
 	for i := 0; i < t.NumField(); i++ {
 		tagInfo := t.Field(i).Tag.Get("info")

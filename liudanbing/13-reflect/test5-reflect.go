@@ -21,7 +21,7 @@ func (this User) Call() {
 	fmt.Printf("%v\n", this)
 }
 
-func DoFiledAndMethod(input interface{}) {
+func DoFieldAndMethod(input interface{}) {
 	// 获取input的type
 	inputType := reflect.TypeOf(input)
 	fmt.Println("inputType: ", inputType) // main.User
@@ -39,6 +39,7 @@ func DoFiledAndMethod(input interface{}) {
 		field := inputType.Field(i) // 获取字段
 		value := inputValue.Field(i).Interface() // 获取字段的值
 		fmt.Printf("%s: %v = %v\n", field.Name, field.Type, value)
+		fmt.Println(inputValue.Field(i)) // inputValue.Field(i) == value
 	}
 
 	// 通过type 获取里面的方法
@@ -55,6 +56,6 @@ func main() {
 	user := User{1, "Tom", 20}
 
 	fmt.Println("user name: ", user.UserName)
-	DoFiledAndMethod(user)
+	DoFieldAndMethod(user)
 
 }
