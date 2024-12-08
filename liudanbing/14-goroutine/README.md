@@ -54,8 +54,28 @@ golang在对调度器处理之前，先将协程(co-routine)改为Goroutine，�
 
 #### 优化 GMP
 ![调度器](./imgs/15.png)  
+Processor是用来处理goroutine的，processor包含了每一个goroutine的资源，如果要运行goroutine，那么需要先获取p。
 
+GMP模型：
+- 最底层是硬件CPU核心层，是CPU的核心数；
+- 操作系统内部调度器，用来调用CPU的；
+- 内核线程；
+- 用户态：每个内核线程上都有一个p，p保存每一个真正的进程（每个程序全部的goroutine的资源(如栈、堆等数据)）；可以通过GOMAXPROCS来设置p的个数，一个p同一时间只能运行一个G。
+- 每个p上面都有一个p的本地队列，p就是负责将队列中的goroutine拿给m执行；那么同一时刻能够运行的G就是来有几个P(并行)=GOMAXPROCS
+- 全局队列：当有G时，优先放入p中，但是没有空闲的p时，就放在全局队列中
+![调度器](./imgs/16.png)  
 
+### 调度器的设计策略
+- 复用线程
+    - work stealing机制  
+    ![work stealing](./imgs/17.png)  
+    在途中，M1在处理G1，而P1后面还有两个G，同时M2是空闲状态；此时M2就从M1中偷取一个G3  
+    - hand off机制  
+    ![hand off](./imgs/18.png)  
+    此时M1在执行的G1阻塞了，此时cpu就在等待中；那么就创建/唤醒一个线程M3，P1和M3进行绑定  
+- 利用并行
+- 抢占
+- 全局G队列
 
 
 
