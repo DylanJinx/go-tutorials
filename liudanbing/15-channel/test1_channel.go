@@ -13,11 +13,10 @@ func main() {
 
 		c <- 666 // 将666发送到channel c
 	}()
-	
+
 	// 之前想用flag := go func()...来获得返回值,但是不行,因为子goroutine是异步的,所以需要用channel来实现
-	num := <- c // 从channel c接收数据，并赋值给num
+	num := <-c // 从channel c接收数据，并赋值给num
 
 	fmt.Println("num = ", num)
 	fmt.Println("main goroutine 结束...")
 }
-
