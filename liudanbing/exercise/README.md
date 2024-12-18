@@ -15,4 +15,4 @@
 
   - - 代码： <a href = "./1-15/animals-management">animals management system codes</a>
 
-- 及时通信系统: <a href = "./timely_communication_system/README.md">timely communication system</a>
+- 及时通信系统: <a href = "./timely_communication_system/readme/README.md">timely communication system</a>
