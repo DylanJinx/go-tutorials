@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"sync"
 )
@@ -47,7 +48,7 @@ func (s *Server) Start() {
 
 	for {
 		                                // accept
-		conn, err := listener.Accept()  // 当accept成功，代表有一个客户端连接进来
+		conn, err := listener.Accept()  // 当accept成功，代表有一个客户端连接进来，conn是和客户端通信的接口
 		if err != nil {
 			fmt.Println("listener.Accept err:", err)
 			continue
@@ -74,6 +75,29 @@ func (s *Server) Handler(conn net.Conn) {
 
 	  // 广播当前用户上线消息
 	s.BroadCast(user, "已上线")
+
+	// 接受客户端发送的消息
+	go func() {
+		buf := make([]byte, 4096)
+		for {
+			n, err := conn.Read(buf) // n代表读取到的字节数
+			if n == 0 { // n == 0代表客户端断开
+				s.BroadCast(user, "下线")  // 广播用户下线消息
+				return
+			}
+
+			if err != nil && err != io.EOF {  // io.EOF代表读到文件末尾
+				fmt.Println("conn.Read err:", err)
+				return
+			}
+
+			// 提取用户的消息(去除\n)
+			msg := string(buf[:n-1])  // 将读取到的字节转换成字符串
+
+			// 将得到的消息进行广播
+			s.BroadCast(user, msg)
+		}
+	}()
 
 	  // 让当前的handler一直阻塞
 	select {}
