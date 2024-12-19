@@ -18,8 +18,8 @@
 1. 构建基础 server: <a href = "./readme/v1.server.readme.md">v1.server</a>
 2. 用户上线功能: <a href = "./readme/v2.user.readme.md">v2.user</a>
 3. 用户消息广播机制: <a href = "./readme/v3.user_message_broadcast.readme.md">v3.user message broadcast</a>
-4. 用户业务层封装 <a href = "./readme/v4.user_service_encapsulation.readme.md">v4.user service encapsulation</a>
-5. 在线用户查询
+4. 用户业务层封装: <a href = "./readme/v4.user_service_encapsulation.readme.md">v4.user service encapsulation</a>
+5. 在线用户查询: <a href = "./readme/v5.online_user_search.readme.md">v5.online user search</a>
 6. 修改用户名
 7. 超时强踢功能
 8. 私聊功能
