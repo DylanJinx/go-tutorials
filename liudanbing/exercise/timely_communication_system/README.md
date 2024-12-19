@@ -1,6 +1,6 @@
 ## 架构图
 
-![1](./imgs/1.png)  
+![1](./readme/imgs/1.png)  
 架构图中`SERVER`主要包含了两种类型：`server`（服务器）和`user`（在线用户）。虚线外面的是真实的`client`。
 
 - `server`
@@ -14,9 +14,10 @@
 
 ## 版本迭代
 
-1. 构建基础 server
-2. 用户上线功能
-3. 用户消息广播机制
+0. socket: <a href = "./readme/socket.md">socket</a>
+1. 构建基础 server: <a href = "./readme/v1.server.readme.md">v1.server</a>
+2. 用户上线功能: <a href = "./readme/v2.user.readme.md">v2.user</a>
+3. 用户消息广播机制: <a href = "./readme/v3.user_message_broadcast.readme.md">v3.user_message_broadcast</a>
 4. 用户业务层封装
 5. 在线用户查询
 6. 修改用户名
