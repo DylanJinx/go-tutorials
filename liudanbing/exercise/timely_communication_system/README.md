@@ -22,5 +22,5 @@
 5. 在线用户查询: <a href = "./readme/v5.online_user_search.readme.md">v5.online user search</a>
 6. 修改用户名: <a href = "./readme/v6.user_rename.readme.md">v6.user rename</a>
 7. 超时强踢功能: <a href = "./readme/v7.user_overtime_kick.readme.md">v7.user overtime kick</a>
-8. 私聊功能
+8. 私聊功能: <a href = "./readme/v8.user_private_chat.readme.md">v7.user private chat</a>
 9. 客户端实现
