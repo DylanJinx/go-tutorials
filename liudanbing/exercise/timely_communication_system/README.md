@@ -20,7 +20,7 @@
 3. 用户消息广播机制: <a href = "./readme/v3.user_message_broadcast.readme.md">v3.user message broadcast</a>
 4. 用户业务层封装: <a href = "./readme/v4.user_service_encapsulation.readme.md">v4.user service encapsulation</a>
 5. 在线用户查询: <a href = "./readme/v5.online_user_search.readme.md">v5.online user search</a>
-6. 修改用户名
-7. 超时强踢功能
+6. 修改用户名: <a href = "./readme/v6.user_rename.readme.md">v6.user rename</a>
+7. 超时强踢功能: <a href = "./readme/v7.user_overtime_kick.readme.md">v7.user overtime kick</a>
 8. 私聊功能
 9. 客户端实现
