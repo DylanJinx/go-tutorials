@@ -3,6 +3,7 @@ package main
 import (
 	"net"
 	"strconv"
+	"strings"
 )
 
 type User struct {
@@ -78,6 +79,23 @@ func (u *User) DoMessage(msg string) {
 		}
 
 		u.server.mapLock.Unlock()
+	} else if len(msg) > 7 && msg[:7] == "rename|" { // msg[:7]是取msg的前7个字符
+		// 消息格式：rename|张三
+		newName := strings.Split(msg, "|")[1]  // 通过|分割msg，取第二个元素；或者使用msg[7:]来取msg的第8个字符到最后一个字符
+		// 判断newName是否存在
+		_, ok := u.server.OnlineMap[newName]
+		if ok {
+			u.SendMessage("当前用户名被使用\n") // 或者 u.C <- "当前用户名被使用\n"
+		} else {
+			u.server.mapLock.Lock()
+			delete(u.server.OnlineMap, u.Name)
+			u.Name = newName
+			u.server.OnlineMap[newName] = u
+			u.server.mapLock.Unlock()
+
+			u.SendMessage("您已经更新用户名:" + u.Name + "\n") // 或者 u.C <- "您已经更新用户名:" + u.Name + "\n"
+		}
+
 	} else {
 		// 将用户发送的消息进行广播
 		u.server.BroadCast(u, msg)
