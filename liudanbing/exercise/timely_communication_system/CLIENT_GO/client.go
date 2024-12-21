@@ -20,19 +20,24 @@ func init() {
 }
 
 type Client struct {
-	ServerIp   string
-	ServerPort int
-	Name	   string
-	conn       net.Conn
-	flag       int            // 当前client的模式
+	ServerIp     string
+	ServerPort   int
+	Name	     string
+	conn         net.Conn
+	flag         int          // 当前client的模式
+	responseChan chan string  // 用于接收server消息的channel
+	done         chan struct{} // 用于通知程序退出的通道
 }
 
 func NewClient(serverIp string, serverPort int) *Client {
 	// 创建客户端对象
 	client := &Client {
-		ServerIp  : serverIp,
-		ServerPort: serverPort,
-		flag      : 999,
+		ServerIp    : serverIp,
+		ServerPort  : serverPort,
+		flag        : 999,
+		responseChan: make(chan string),
+		done        : make(chan struct{}),
+
 	}
 
 	// 连接server
@@ -95,10 +100,16 @@ func (c *Client) menu() bool {
 
 func (c *Client) UpdateName() bool {
 	fmt.Println(">>>>>> 请输入用户名:")
-	fmt.Scanln(&c.Name)
+	reader := bufio.NewReader(os.Stdin)  // 从标准输入读取内容
+	name, err := reader.ReadString('\n')  // 读取直到遇到\n
+	if err != nil {
+		fmt.Println("reader.ReadString err:", err)
+		return false
+	}
 
+	c.Name = strings.TrimSpace(name) // 去掉name两端的空格
 	sendMsg := "rename|" + c.Name + "\n"
-	_, err := c.conn.Write([]byte(sendMsg)) // 将sendMsg发送给服务器
+	_, err = c.conn.Write([]byte(sendMsg)) // 将sendMsg发送给服务器
 	if err != nil {
 		fmt.Println("conn.Write err:", err)
 		return false
@@ -110,11 +121,21 @@ func (c *Client) UpdateName() bool {
 // 公聊模式
 func (c *Client) PublicChat() {
 	fmt.Println(">>>>>> 请输入聊天内容，exit退出")
-	var chatMsg string
-	fmt.Scanln(&chatMsg)
+	reader := bufio.NewReader(os.Stdin) // 从标准输入读取内容
 
-	for chatMsg != "exit" {
-		// 消息不为空则发送
+	for {
+		fmt.Println("公聊>>>")
+		chatMsg, err := reader.ReadString('\n') // 读取直到遇到\n
+		if err != nil {
+			fmt.Println("reader.ReadString err:", err)
+			return
+		}
+
+		chatMsg = strings.TrimSpace(chatMsg) // 去掉chatMsg两端的空格
+		if chatMsg == "exit" {
+			break
+		}
+
 		if len(chatMsg) != 0 {
 			sendMsg := chatMsg + "\n"
 			_, err := c.conn.Write([]byte(sendMsg))
@@ -123,10 +144,6 @@ func (c *Client) PublicChat() {
 				break
 			}
 		}
-
-		chatMsg = ""
-		fmt.Println(">>>>>> 请输入聊天内容，exit退出")
-		fmt.Scanln(&chatMsg)
 	}
 }
 
@@ -207,6 +224,11 @@ func (c *Client) Run() {
 			c.SelectUsers()
 		}
 	}
+
+	// 用户选择退出，通知其他goroutine，关闭连接
+	fmt.Println(">>>>>> 正在退出......")
+	close(c.done) // 关闭done通道
+	c.conn.Close()
 }
 
 // 这段逻辑不能写到Run()中，如果写到Run()中，那么Run()就会阻塞在这里，无法继续执行

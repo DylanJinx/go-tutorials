@@ -26,3 +26,5 @@
 9. 客户端实现:
    - <a href = "./readme/v9_2.command_line_parse.readme.md">v9_2.command line parse</a>
    - <a href = "./readme/v9_4.client_rename.readme.md">v9_4.client rename</a>
+   - <a href = "./readme/v9_6.client_public_chat.readme.md">v9_6.client public chat</a>
+   - <a href = "./readme/v9_7.client_terminal_exit.readme.md">v9_4.client terminal exit</a>
