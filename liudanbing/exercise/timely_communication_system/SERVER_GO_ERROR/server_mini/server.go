@@ -1,6 +1,7 @@
-package main
+package server_mini
 
 import (
+	"SERVER_GO_ERROR/user_mini"
 	"fmt"
 	"io"
 	"net"
@@ -13,8 +14,8 @@ type Server struct {
 	Port int
 
 	                            // 在线用户的列表
-	OnlineMap map[string]*User  // key: Name, value: *User
-	mapLock   sync.RWMutex      // 关于OnlineMap的读写锁
+	OnlineMap map[string]*user_mini.User  // key: Name, value: *User
+	MapLock   sync.RWMutex      // 关于OnlineMap的读写锁
 
 	  // 消息广播的channel
 	Message chan string
@@ -26,7 +27,7 @@ func NewServer(ip string, port int) *Server {
 	server := &Server{
 		Ip       : ip,
 		Port     : port,
-		OnlineMap: make(map[string]*User),
+		OnlineMap: make(map[string]*user_mini.User),
 		Message  : make(chan string),
 	}
 
@@ -66,7 +67,7 @@ func (s *Server) Handler(conn net.Conn) {
 	  // fmt.Println("连接建立成功")
 
 	  // 创建一个用户
-	user := NewUser(conn, s)
+	user := user_mini.NewUser(conn, s)
 
 	/*v3 -> v4
 	  // 用户上线了，将用户加入到OnlineMap中
@@ -136,7 +137,7 @@ func (s *Server) Handler(conn net.Conn) {
 }
 
   // 广播消息的方法(arg1: 由哪个用户发起的, arg2: 消息内容)
-func (s *Server) BroadCast(user *User, msg string) {
+func (s *Server) BroadCast(user *user_mini.User, msg string) {
 	sandMsg := "[" + user.Addr + "]" + user.Name + ":" + msg
 
 	s.Message <- sandMsg  // 将消息发送到Message channel中
@@ -148,11 +149,11 @@ func (s *Server) ListenMessage() {
 		msg := <- s.Message
 
 		  // 将msg发送给全部在线用户
-		s.mapLock.Lock()
+		s.MapLock.Lock()
 		for _, cli := range s.OnlineMap {
 			cli.C <- msg  // 将消息发送到用户的channel中
 		}
 
-		s.mapLock.Unlock()
+		s.MapLock.Unlock()
 	}
 }

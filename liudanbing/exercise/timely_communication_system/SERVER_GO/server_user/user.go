@@ -1,4 +1,4 @@
-package main
+package server_user
 
 import (
 	"net"
@@ -45,9 +45,9 @@ func (u *User) ListenMessage() {
 // 用户上线的业务
 func (u *User) Online() {
 	// 用户上线了，将用户加入到OnlineMap中
-	u.server.mapLock.Lock()
+	u.server.MapLock.Lock()
 	u.server.OnlineMap[u.Name] = u
-	u.server.mapLock.Unlock()
+	u.server.MapLock.Unlock()
 
 	// 广播当前用户上线消息
 	u.server.BroadCast(u, "已上线")
@@ -56,9 +56,9 @@ func (u *User) Online() {
 // 用户下线的业务
 func (u *User) Offline() {
 	// 用户下线，将用户从OnlineMap中删除
-	u.server.mapLock.Lock()
+	u.server.MapLock.Lock()
 	delete(u.server.OnlineMap, u.Name)
-	u.server.mapLock.Unlock()
+	u.server.MapLock.Unlock()
 
 	// 广播当前用户下线
 	u.server.BroadCast(u, "已下线")
@@ -69,7 +69,7 @@ func (u *User) DoMessage(msg string) {
 	if msg == "who" {
 		// 查询当前在线用户有哪些
 
-		u.server.mapLock.Lock()
+		u.server.MapLock.Lock()
 		i := 1
 
 		for _, user := range u.server.OnlineMap {
@@ -78,7 +78,7 @@ func (u *User) DoMessage(msg string) {
 			i++
 		}
 
-		u.server.mapLock.Unlock()
+		u.server.MapLock.Unlock()
 	} else if len(msg) > 7 && msg[:7] == "rename|" { // msg[:7]是取msg的前7个字符
 		// 消息格式：rename|张三
 		newName := strings.Split(msg, "|")[1]  // 通过|分割msg，取第二个元素；或者使用msg[7:]来取msg的第8个字符到最后一个字符
@@ -86,12 +86,14 @@ func (u *User) DoMessage(msg string) {
 		_, ok := u.server.OnlineMap[newName]
 		if ok {
 			u.SendMessage("当前用户名被使用\n") // 或者 u.C <- "当前用户名被使用\n"
+		} else if newName == "exit" {
+			u.SendMessage("禁止使用exit作为用户名\n")
 		} else {
-			u.server.mapLock.Lock()
+			u.server.MapLock.Lock()
 			delete(u.server.OnlineMap, u.Name)
 			u.Name = newName
 			u.server.OnlineMap[newName] = u
-			u.server.mapLock.Unlock()
+			u.server.MapLock.Unlock()
 
 			u.SendMessage("您已经更新用户名:" + u.Name + "\n") // 或者 u.C <- "您已经更新用户名:" + u.Name + "\n"
 		}

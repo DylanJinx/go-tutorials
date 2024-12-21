@@ -159,21 +159,41 @@ func (c *Client) SelectUsers() {
 
 // 私聊模式
 func (c *Client) PrivateChat() {
-	var remoteName string
+	reader := bufio.NewReader(os.Stdin) // 从标准输入读取内容
+	// var remoteName string
 	var chatMsg string
 
 	c.SelectUsers()
 
 	fmt.Println(">>>>>> 请输入聊天对象用户名，exit退出:")
-	fmt.Scanln(&remoteName)
+	// fmt.Scanln(&remoteName)
 
-	// 选择聊天对象
-	for remoteName != "exit" {
+	for {
+		fmt.Print("私聊对象>>>")
+		remoteName, err := reader.ReadString('\n') // 读取直到遇到\n
+		if err != nil {
+			fmt.Println("reader.ReadString err", err)
+			return
+		}
+
+		remoteName = strings.TrimSpace(remoteName) // 去掉remoteName两端的空格
+		if remoteName == "exit" {
+			break
+		}
+
 		fmt.Println(">>>>>> 请输入消息内容，exit退出:")
-		fmt.Scanln(&chatMsg)
+		for {
+			fmt.Print("私聊内容>>>")
+			chatMsg, err = reader.ReadString('\n') // 读取直到遇到\n
+			if err != nil {
+				fmt.Println("读取消息内容失败:", err)
+				return
+			}
+			chatMsg = strings.TrimSpace(chatMsg) // 去掉chatMsg两端的空格
+			if chatMsg == "exit" {
+				break
+			}
 
-		// 与这个聊天对象进行聊天
-		for chatMsg != "exit" {
 			if len(chatMsg) != 0 {
 				sendMsg := "to|" + remoteName + "|" + chatMsg + "\n"
 				_, err := c.conn.Write([]byte(sendMsg))
@@ -182,20 +202,13 @@ func (c *Client) PrivateChat() {
 					break
 				}
 			}
-
-			// 多次输入消息
-			// chatMsg = ""
-			fmt.Println(">>>>>> 请输入消息内容，exit退出:")
-			fmt.Scanln(&chatMsg)
 		}
 
-		// 重新选择聊天对象
-		//remoteName = ""
 		c.SelectUsers()
 		fmt.Println(">>>>>> 请输入聊天对象用户名，exit退出:")
-		fmt.Scanln(&remoteName)
 
 	}
+
 }
 
 func (c *Client) Run() {

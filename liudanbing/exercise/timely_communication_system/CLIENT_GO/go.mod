@@ -1,3 +1,3 @@
-module timely_communication_system_client
+module CLIENT_GO
 
 go 1.23.4

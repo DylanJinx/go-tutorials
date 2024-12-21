@@ -1,3 +1,3 @@
-module timely_communication_system_server
+module SERVER_GO
 
 go 1.23.4
